@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API_KEY = "YOUR_API_KEY";
+const API_KEY = "d2rj7v9r01qv11les8i0d2rj7v9r01qv11les8ig";
 
 const TradingTable = ({ onStockSelect }) => {
   const [stocks, setStocks] = useState([]);

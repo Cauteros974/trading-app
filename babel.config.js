@@ -1,3 +1,3 @@
-module.exports = {
-    plugins: [["@million/babel-plugin", { "auto": true }]],
-  };
+{
+    plugins: [["million/babel", { "auto": true }]]
+  }

@@ -1,4 +1,3 @@
-// src/TradingTable.jsx
 import React, { useState, useEffect } from 'react';
 
 const generateRandomData = (count) => {
@@ -22,8 +21,8 @@ const TradingTable = () => {
     const interval = setInterval(() => {
       setStocks((prevStocks) => {
         return prevStocks.map((stock) => {
-          // Имитация изменения цены
-          const change = (Math.random() - 0.5) * 0.5; // Небольшое случайное изменение
+         
+          const change = (Math.random() - 0.5) * 0.5;
           const newPrice = Math.max(0, stock.price + change);
           const newChange = newPrice - stock.price;
 
@@ -34,7 +33,7 @@ const TradingTable = () => {
           };
         });
       });
-    }, 500); // Обновление каждые 500 мс
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);

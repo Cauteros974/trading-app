@@ -1,52 +1,72 @@
 import React, { useState, useEffect } from 'react';
 
-const generateRandomData = (count) => {
-  const data = [];
-  for (let i = 0; i < count; i++) {
-    const price = (Math.random() * 100 + 100).toFixed(2);
-    data.push({
-      id: i,
-      ticker: `STOCK-${i}`,
-      price: parseFloat(price),
-      change: 0,
-    });
-  }
-  return data;
-};
+const API_KEY = "YOUR_API_KEY";
 
 const TradingTable = ({ onStockSelect }) => {
-  const [stocks, setStocks] = useState(() => generateRandomData(50));
+  const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setStocks((prevStocks) => {
-        return prevStocks.map((stock) => {
-          const change = (Math.random() - 0.5) * 0.5;
-          const newPrice = Math.max(0, stock.price + change);
-          const newChange = newPrice - stock.price;
 
-          return {
-            ...stock,
-            price: parseFloat(newPrice.toFixed(2)),
-            change: newChange,
-          };
-        });
+    const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
+    
+    const tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
+    socket.addEventListener('open', (event) => {
+      tickers.forEach(ticker => {
+        socket.send(JSON.stringify({'type': 'subscribe', 'symbol': ticker}));
       });
-    }, 500);
+    });
+    
+    socket.addEventListener('message', (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'trade') {
+        const tradeData = message.data[0];
+        const { s: symbol, p: price } = tradeData;
 
-    return () => clearInterval(interval);
+        setStocks(prevStocks => {
+          const newStocks = [...prevStocks];
+          let updated = false;
+
+          const updatedStocks = newStocks.map(stock => {
+            if (stock.ticker === symbol) {
+              const change = price - stock.price;
+              updated = true;
+              return {
+                ...stock,
+                price: parseFloat(price.toFixed(2)),
+                change: parseFloat(change.toFixed(2)),
+              };
+            }
+            return stock;
+          });
+          
+          if (!updated) {
+            updatedStocks.push({
+              id: symbol,
+              ticker: symbol,
+              price: parseFloat(price.toFixed(2)),
+              change: 0
+            });
+          }
+          return updatedStocks;
+        });
+      }
+    });
+
+    return () => {
+      socket.close();
+    };
   }, []);
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Exchange glass</h2>
-      <p>Updated in real time</p>
+      <h2>Биржевой стакан</h2>
+      <p>Обновляется в реальном времени (Finnhub.io)</p>
       <table>
         <thead>
           <tr>
-            <th>Ticker</th>
-            <th>Price</th>
-            <th>Change</th>
+            <th>Тикер</th>
+            <th>Цена</th>
+            <th>Изменение</th>
           </tr>
         </thead>
         <tbody>

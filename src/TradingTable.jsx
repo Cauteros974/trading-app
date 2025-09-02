@@ -59,14 +59,14 @@ const TradingTable = ({ onStockSelect }) => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Биржевой стакан</h2>
-      <p>Обновляется в реальном времени (Finnhub.io)</p>
+      <h2>Exchange glass</h2>
+      <p>Updated in real time </p>
       <table>
         <thead>
           <tr>
-            <th>Тикер</th>
-            <th>Цена</th>
-            <th>Изменение</th>
+            <th>Ticker</th>
+            <th>Price</th>
+            <th>Change</th>
           </tr>
         </thead>
         <tbody>

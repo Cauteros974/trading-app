@@ -14,14 +14,13 @@ const generateRandomData = (count) => {
   return data;
 };
 
-const TradingTable = () => {
+const TradingTable = ({ onStockSelect }) => {
   const [stocks, setStocks] = useState(() => generateRandomData(50));
 
   useEffect(() => {
     const interval = setInterval(() => {
       setStocks((prevStocks) => {
         return prevStocks.map((stock) => {
-         
           const change = (Math.random() - 0.5) * 0.5;
           const newPrice = Math.max(0, stock.price + change);
           const newChange = newPrice - stock.price;
@@ -52,7 +51,11 @@ const TradingTable = () => {
         </thead>
         <tbody>
           {stocks.map((stock) => (
-            <tr key={stock.id}>
+            <tr
+              key={stock.id}
+              onClick={() => onStockSelect(stock)}
+              style={{ cursor: 'pointer' }}
+            >
               <td>{stock.ticker}</td>
               <td>{stock.price}</td>
               <td style={{ color: stock.change > 0 ? 'green' : 'red' }}>

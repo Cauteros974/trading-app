@@ -18,6 +18,9 @@ function App() {
 
   return (
     <div className="App">
+      <button onClick={toggleTheme} style={{ position: 'fixed', top: '20px', right: '20px', padding: '10px 15px', cursor: 'pointer', zIndex: 100 }}>
+        Change Theme ({theme === 'light' ? 'Светлая' : 'Тёмная'})
+      </button>
       <TradingTable onStockSelect={handleStockSelect} />
       {selectedStock && <StockDetails stock={selectedStock} />}
     </div>

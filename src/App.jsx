@@ -6,7 +6,7 @@ import './App.css';
 
 function App() {
   const [selectedStock, setSelectedStock] = useState(null);
-  const [theme, toggleTheme] = useTheme;
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -19,7 +19,7 @@ function App() {
   return (
     <div className="App">
       <button onClick={toggleTheme} style={{ position: 'fixed', top: '20px', right: '20px', padding: '10px 15px', cursor: 'pointer', zIndex: 100 }}>
-        Change Theme ({theme === 'light' ? 'Светлая' : 'Тёмная'})
+      Switch topic ({theme === 'light' ? 'Light' : 'Dark'})
       </button>
       <TradingTable onStockSelect={handleStockSelect} />
       {selectedStock && <StockDetails stock={selectedStock} />}

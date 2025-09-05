@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FixedSizeList } from 'react-window';
 
-const API_KEY = "d2rj7v9r01qv11les8i0d2rj7v9r01qv11les8ig";
+const API_KEY = "d2tendpr01qr5a72a7b0d2tendpr01qr5a72a7bg";
 
 const Row = ({ index, style, data }) => {
-  const { stocks, onStockSelect } = data;
-  const stock = stocks[index];
+  const { filteredStocks, onStockSelect } = data;
+  const stock = filteredStocks[index];
 
   if (!stock) {
     return null;
@@ -29,6 +29,7 @@ const Row = ({ index, style, data }) => {
 
 const TradingTable = ({ onStockSelect }) => {
   const [stocks, setStocks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
@@ -82,10 +83,23 @@ const TradingTable = ({ onStockSelect }) => {
     };
   }, []);
 
+  const filteredStocks = useMemo(() => {
+    return stocks.filter(stock => 
+      stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [stocks, searchTerm]);
+
   return (
     <div style={{ padding: '20px' }}>
       <h2>Биржевой стакан</h2>
       <p>Обновляется в реальном времени (Finnhub.io)</p>
+      <input
+        type="text"
+        placeholder="Поиск по тикеру..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ width: '100%', maxWidth: '800px', padding: '10px', fontSize: '16px', marginBottom: '20px', border: '1px solid #ddd' }}
+      />
       <div style={{ width: '100%', maxWidth: '800px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
           <thead>
@@ -98,9 +112,9 @@ const TradingTable = ({ onStockSelect }) => {
         </table>
         <FixedSizeList
           height={600}
-          itemCount={stocks.length}
+          itemCount={filteredStocks.length}
           itemSize={40}
-          itemData={{ stocks, onStockSelect }}
+          itemData={{ filteredStocks, onStockSelect }}
           width={'100%'}
         >
           {Row}

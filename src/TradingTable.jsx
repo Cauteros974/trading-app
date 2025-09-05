@@ -12,17 +12,15 @@ const Row = ({ index, style, data }) => {
   }
 
   return (
-    <div style={style}>
-      <tr
-        onClick={() => onStockSelect(stock)}
-        style={{ cursor: 'pointer', display: 'flex' }}
-      >
-        <td style={{ width: '33.3%', padding: '12px 15px' }}>{stock.ticker}</td>
-        <td style={{ width: '33.3%', padding: '12px 15px' }}>{stock.price}</td>
-        <td style={{ width: '33.3%', padding: '12px 15px', color: stock.change > 0 ? 'green' : 'red' }}>
-          {stock.change.toFixed(2)}
-        </td>
-      </tr>
+    <div
+      style={{ ...style, display: 'flex', cursor: 'pointer', borderBottom: '1px solid #ddd' }}
+      onClick={() => onStockSelect(stock)}
+    >
+      <div style={{ width: '33.3%', padding: '12px 15px' }}>{stock.ticker}</div>
+      <div style={{ width: '33.3%', padding: '12px 15px' }}>{stock.price}</div>
+      <div style={{ width: '33.3%', padding: '12px 15px', color: stock.change > 0 ? 'green' : 'red' }}>
+        {stock.change.toFixed(2)}
+      </div>
     </div>
   );
 };
@@ -100,16 +98,15 @@ const TradingTable = ({ onStockSelect }) => {
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ width: '100%', maxWidth: '800px', padding: '10px', fontSize: '16px', marginBottom: '20px', border: '1px solid #ddd' }}
       />
-      <div style={{ width: '100%', maxWidth: '800px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-          <thead>
-            <tr>
-              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Тикер</th>
-              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Цена</th>
-              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Изменение</th>
-            </tr>
-          </thead>
-        </table>
+      <div style={{ width: '100%', maxWidth: '800px', border: '1px solid #ddd', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+        {/* Заголовки таблицы, стилизованные как div */}
+        <div style={{ display: 'flex', backgroundColor: '#007bff', color: '#fff', fontWeight: 'bold' }}>
+          <div style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left' }}>Тикер</div>
+          <div style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left' }}>Цена</div>
+          <div style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left' }}>Изменение</div>
+        </div>
+
+        {/* Используем FixedSizeList для виртуализации списка */}
         <FixedSizeList
           height={600}
           itemCount={filteredStocks.length}

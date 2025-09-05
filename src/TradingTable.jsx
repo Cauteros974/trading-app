@@ -1,25 +1,46 @@
-// src/TradingTable.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { FixedSizeList } from 'react-window';
 
-// Замените YOUR_API_KEY на ваш реальный ключ Finnhub
 const API_KEY = "d2tendpr01qr5a72a7b0d2tendpr01qr5a72a7bg";
+
+const Row = ({ index, style, data }) => {
+  const { filteredStocks, onStockSelect } = data;
+  const stock = filteredStocks[index];
+
+  if (!stock) {
+    return null;
+  }
+
+  return (
+    <div style={style}>
+      <tr
+        onClick={() => onStockSelect(stock)}
+        style={{ cursor: 'pointer', display: 'flex' }}
+      >
+        <td style={{ width: '33.3%', padding: '12px 15px' }}>{stock.ticker}</td>
+        <td style={{ width: '33.3%', padding: '12px 15px' }}>{stock.price}</td>
+        <td style={{ width: '33.3%', padding: '12px 15px', color: stock.change > 0 ? 'green' : 'red' }}>
+          {stock.change.toFixed(2)}
+        </td>
+      </tr>
+    </div>
+  );
+};
 
 const TradingTable = ({ onStockSelect }) => {
   const [stocks, setStocks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Подключение к WebSocket
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
-
-    // Отправляем подписку на тикеры. Можно выбрать любые.
-    const tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
+    const tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BINANCE:BTCUSDT", "BINANCE:ETHUSDT", "NVDA", "META", "BABA", "NFLX", "SBUX", "UBER", "DIS", "INTC", "CSCO", "PEP"];
+    
     socket.addEventListener('open', (event) => {
       tickers.forEach(ticker => {
         socket.send(JSON.stringify({'type': 'subscribe', 'symbol': ticker}));
       });
     });
 
-    // Обработка входящих сообщений
     socket.addEventListener('message', (event) => {
       const message = JSON.parse(event.data);
       if (message.type === 'trade') {
@@ -43,7 +64,6 @@ const TradingTable = ({ onStockSelect }) => {
             return stock;
           });
 
-          // Если тикера еще нет в списке, добавляем его
           if (!updated) {
             updatedStocks.push({
               id: symbol,
@@ -52,45 +72,54 @@ const TradingTable = ({ onStockSelect }) => {
               change: 0
             });
           }
+          updatedStocks.sort((a, b) => a.ticker.localeCompare(b.ticker));
           return updatedStocks;
         });
       }
     });
 
-    // Очистка при размонтировании компонента
     return () => {
       socket.close();
     };
   }, []);
 
+  const filteredStocks = useMemo(() => {
+    return stocks.filter(stock => 
+      stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [stocks, searchTerm]);
+
   return (
     <div style={{ padding: '20px' }}>
       <h2>Биржевой стакан</h2>
       <p>Обновляется в реальном времени (Finnhub.io)</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Тикер</th>
-            <th>Цена</th>
-            <th>Изменение</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stocks.map((stock) => (
-            <tr
-              key={stock.id}
-              onClick={() => onStockSelect(stock)}
-              style={{ cursor: 'pointer' }}
-            >
-              <td>{stock.ticker}</td>
-              <td>{stock.price}</td>
-              <td style={{ color: stock.change > 0 ? 'green' : 'red' }}>
-                {stock.change.toFixed(2)}
-              </td>
+      <input
+        type="text"
+        placeholder="Поиск по тикеру..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ width: '100%', maxWidth: '800px', padding: '10px', fontSize: '16px', marginBottom: '20px', border: '1px solid #ddd' }}
+      />
+      <div style={{ width: '100%', maxWidth: '800px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+          <thead>
+            <tr>
+              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Тикер</th>
+              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Цена</th>
+              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Изменение</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+        </table>
+        <FixedSizeList
+          height={600}
+          itemCount={filteredStocks.length}
+          itemSize={40}
+          itemData={{ filteredStocks, onStockSelect }}
+          width={'100%'}
+        >
+          {Row}
+        </FixedSizeList>
+      </div>
     </div>
   );
 };

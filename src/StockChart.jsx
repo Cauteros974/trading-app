@@ -78,7 +78,7 @@ const StockChart = ({ stock }) => {
           legend: { display: false },
           tooltip: {
             callbacks: {
-              label: (context) => `Цена: ${context.raw}`,
+              label: (context) => `Price: ${context.raw}`,
             },
           },
         },

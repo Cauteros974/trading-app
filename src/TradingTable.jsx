@@ -91,11 +91,11 @@ const TradingTable = ({ onStockSelect }) => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Биржевой стакан</h2>
-      <p>Обновляется в реальном времени (Finnhub.io)</p>
+      <h2>Exchange glass</h2>
+      <p>Updated in real time (Finnhub.io)</p>
       <input
         type="text"
-        placeholder="Поиск по тикеру..."
+        placeholder="Search by ticker..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ width: '100%', maxWidth: '800px', padding: '10px', fontSize: '16px', marginBottom: '20px', border: '1px solid #ddd' }}

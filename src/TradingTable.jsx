@@ -1,59 +1,10 @@
-import React, { useEffect, useState, memo } from "react";
-import { FixedSizeList } from "react-window";
+import React, {useState, useEffect} from "react";
+import { AutoSizer, Table, Column } from "react-virtualized";
+import "react-virtualized/styles.css";
 
 const API_KEY = "d2tendpr01qr5a72a7b0d2tendpr01qr5a72a7bg";
 
 const round2 = (n) => Math.round(n * 100) / 100;
-const fmtChange = (c) => (c === null || c === undefined ? "—" : c.toFixed(2));
-const changeColor = (c) => (c > 0 ? "green" : c < 0 ? "red" : "inherit");
-
-const Header = () => (
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "1.2fr 0.8fr 0.8fr",
-      gap: 0,
-      padding: "12px 15px",
-      background: "#007bff",
-      color: "#fff",
-      fontWeight: 600,
-      borderTopLeftRadius: 8,
-      borderTopRightRadius: 8,
-    }}
-  >
-    <div>Тикер</div>
-    <div>Цена</div>
-    <div>Изменение</div>
-  </div>
-);
-
-const Row = memo(({ index, style, data }) => {
-  const { list, onStockSelect } = data;
-  const stock = list[index];
-  if (!stock) return null;
-
-  return (
-    <div
-      onClick={() => onStockSelect?.(stock)}
-      style={{
-        ...style,
-        display: "grid",
-        gridTemplateColumns: "1.2fr 0.8fr 0.8fr",
-        alignItems: "center",
-        padding: "0 15px",
-        height: "40px",
-        borderBottom: "1px solid #eee",
-        cursor: "pointer",
-        userSelect: "none",
-      }}
-      role="row"
-    >
-      <div>{stock.ticker}</div>
-      <div>{stock.price.toFixed(2)}</div>
-      <div style={{ color: changeColor(stock.change) }}>{fmtChange(stock.change)}</div>
-    </div>
-  );
-});
 
 const TradingTable = ({ onStockSelect }) => {
   const [stocks, setStocks] = useState([]);
@@ -63,23 +14,20 @@ const TradingTable = ({ onStockSelect }) => {
     const tickers = [
       "AAPL", "GOOGL", "MSFT", "AMZN", "TSLA",
       "BINANCE:BTCUSDT", "BINANCE:ETHUSDT",
-      "NVDA", "META", "BABA", "NFLX", "SBUX",
-      "UBER", "DIS", "INTC", "CSCO", "PEP"
+      "NVDA", "META", "BABA", "NFLX",
+      "SBUX", "UBER", "DIS", "INTC", "CSCO", "PEP"
     ];
 
-    const subscribe = () => {
+    socket.addEventListener("open", () => {
       tickers.forEach((t) =>
         socket.send(JSON.stringify({ type: "subscribe", symbol: t }))
       );
-    };
-
-    socket.addEventListener("open", subscribe);
+    });
 
     socket.addEventListener("message", (event) => {
       const message = JSON.parse(event.data);
-      if (message.type === "ping") return;
       if (message.type !== "trade" || !Array.isArray(message.data)) return;
-      
+
       setStocks((prev) => {
         const map = Object.create(null);
         for (const s of prev) map[s.ticker] = s;
@@ -105,19 +53,10 @@ const TradingTable = ({ onStockSelect }) => {
           }
         }
 
-        const next = Object.values(map).sort((a, b) =>
+        return Object.values(map).sort((a, b) =>
           a.ticker.localeCompare(b.ticker)
         );
-        return next;
       });
-    });
-
-    socket.addEventListener("error", (e) => {
-      console.error("WS error:", e);
-    });
-
-    socket.addEventListener("close", (e) => {
-      console.warn("WS closed:", e.code, e.reason);
     });
 
     return () => socket.close();
@@ -134,24 +73,58 @@ const TradingTable = ({ onStockSelect }) => {
         style={{
           width: "100%",
           maxWidth: 820,
+          height: 600,
           background: "#fff",
           borderRadius: 8,
           boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
           overflow: "hidden",
         }}
       >
-        <Header />
-
-        <FixedSizeList
-          height={600}
-          itemCount={stocks.length}
-          itemSize={40}
-          itemData={{ list: stocks, onStockSelect }}
-          width={"100%"}
-          itemKey={(index, data) => data.list[index].ticker}
-        >
-          {Row}
-        </FixedSizeList>
+        <AutoSizer>
+          {({ height, width }) => (
+            <Table
+              width={width}
+              height={height}
+              headerHeight={40}
+              rowHeight={40}
+              rowCount={stocks.length}
+              rowGetter={({ index }) => stocks[index]}
+              onRowClick={({ rowData }) => onStockSelect?.(rowData)}
+              rowStyle={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+              headerStyle={{
+                background: "#007bff",
+                color: "#fff",
+                fontWeight: 600,
+              }}
+            >
+              <Column label="Тикер" dataKey="ticker" width={width * 0.33} />
+              <Column
+                label="Цена"
+                dataKey="price"
+                width={width * 0.33}
+                cellRenderer={({ cellData }) => cellData.toFixed(2)}
+              />
+              <Column
+                label="Изменение"
+                dataKey="change"
+                width={width * 0.34}
+                cellRenderer={({ cellData }) => (
+                  <span
+                    style={{
+                      color: cellData > 0 ? "green" : cellData < 0 ? "red" : "black",
+                    }}
+                  >
+                    {cellData.toFixed(2)}
+                  </span>
+                )}
+              />
+            </Table>
+          )}
+        </AutoSizer>
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { FixedSizeList } from 'react-window';
 
 const API_KEY = "d2rj7v9r01qv11les8i0d2rj7v9r01qv11les8ig";
@@ -25,4 +27,18 @@ const Row = ({ index, style, data }) => {
       </tr>
     </div>
   )
+};
+
+const TradingTable = ({ onStockSelect }) => {
+  const [stocks, setStocks] = useState([]); 
+
+  useEffect(() => {
+    const socket = new WebSocket(`wss://ws.finnhub.io?token=${d2rj7v9r01qv11les8i0d2rj7v9r01qv11les8ig}`);
+    const tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BINANCE:BTCUSDT", "BINANCE:ETHUSDT", "NVDA", "META", "BABA", "NFLX", "SBUX", "UBER", "DIS", "INTC", "CSCO", "PEP"];
+    
+    socket.addEventListener('open', (event) => {
+      tickers.forEach(ticker => {
+        socket.send(JSON.stringify({'type': 'subscribe', 'symbol': ticker}));
+      });
+  });
 }

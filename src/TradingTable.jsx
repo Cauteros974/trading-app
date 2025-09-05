@@ -83,4 +83,31 @@ const TradingTable = ({ onStockSelect }) => {
       socket.close();
     };
   }, []);
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h2>Биржевой стакан</h2>
+      <p>Обновляется в реальном времени (Finnhub.io)</p>
+      <div style={{ width: '100%', maxWidth: '800px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+          <thead>
+            <tr>
+              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Тикер</th>
+              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Цена</th>
+              <th style={{ width: '33.3%', padding: '12px 15px', textAlign: 'left', backgroundColor: '#007bff', color: '#fff' }}>Изменение</th>
+            </tr>
+          </thead>
+        </table>
+        <FixedSizeList
+          height={600}
+          itemCount={stocks.length}
+          itemSize={40}
+          itemData={{ stocks, onStockSelect }}
+          width={'100%'}
+        >
+          {Row}
+        </FixedSizeList>
+      </div>
+    </div>
+  );
 };

@@ -1,19 +1,17 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { FixedSizeList } from 'react-window';
 
 const API_KEY = "d2rj7v9r01qv11les8i0d2rj7v9r01qv11les8ig";
 
 const Row = ({ index, style, data }) => {
   const { stocks, onStockSelect } = data;
-  const stock = stock[index];
+  const stock = stocks[index];
 
   if (!stock) {
     return null;
   }
 
-  return(
+  return (
     <div style={style}>
       <tr
         onClick={() => onStockSelect(stock)}
@@ -26,14 +24,14 @@ const Row = ({ index, style, data }) => {
         </td>
       </tr>
     </div>
-  )
+  );
 };
 
 const TradingTable = ({ onStockSelect }) => {
   const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
-    const socket = new WebSocket(`wss://ws.finnhub.io?token=${d2rj7v9r01qv11les8i0d2rj7v9r01qv11les8ig}`);
+    const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
     const tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BINANCE:BTCUSDT", "BINANCE:ETHUSDT", "NVDA", "META", "BABA", "NFLX", "SBUX", "UBER", "DIS", "INTC", "CSCO", "PEP"];
     
     socket.addEventListener('open', (event) => {
@@ -111,3 +109,5 @@ const TradingTable = ({ onStockSelect }) => {
     </div>
   );
 };
+
+export default TradingTable;

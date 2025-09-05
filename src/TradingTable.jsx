@@ -83,3 +83,4 @@ const TradingTable = ({ onStockSelect }) => {
       socket.close();
     };
   }, []);
+};

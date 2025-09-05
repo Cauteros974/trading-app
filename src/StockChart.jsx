@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -29,7 +29,7 @@ const StockChart = ({ stock }) => {
     useEffect( () => {
         if (!stock) return;
 
-        const socket = new WebSocket('wss://ws.finnhub.io?token=${API_KEY}');
+        const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
 
         socket.addEventListener("open", () => {
             socket.send(JSON.stringify({ type: "subscribe", symbol: stock.ticker }));
@@ -71,5 +71,28 @@ const StockChart = ({ stock }) => {
         ],
     };
 
-    
-}
+    const options = {
+        responsive: true,
+        animation: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (context) => `Цена: ${context.raw}`,
+            },
+          },
+        },
+        scales: {
+          x: { display: false },
+          y: { beginAtZero: false },
+        },
+    };
+
+    return(
+        <div style={ {height: "300px", width: "100%"}}>
+            <Line data={data} options={options}></Line>
+        </div>
+    );
+};
+
+export default StockChart;

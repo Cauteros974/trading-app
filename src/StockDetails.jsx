@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react";
 
-const StockDetails = ({ stock }) =>{
-    return (
-        <div className="stock-details-card" style={{
-            marginLeft: '40px',
-            padding: '20px',
-            borderRadius: '8px',
-            maxWidth: '400px',
-            textAlign: 'center'
-        }}>
-            
-            <h2>Ticker details</h2>
-            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{stock.ticker}</p>
-            <p>Price: {stock.price}</p>
-            <p>Change per session: <span style={{ color: stock.change > 0 ? 'green' : 'red' }}>{stock.change.toFixed(2)}</span></p>
-        </div>    
-    );
+const StockDetails = ({ stock }) => {
+  if (!stock) return null;
+
+  return (
+    <div className="stock-details-card">
+      <h2>Ticker details</h2>
+      <p className="stock-price">{stock.ticker}</p>
+      <p>Price: {Number(stock.price).toFixed(2)}</p>
+      <p>
+        Change per session:{" "}
+        <span style={{ color: stock.change > 0 ? "green" : "red" }}>
+          {stock.change.toFixed(2)}
+        </span>
+      </p>
+    </div>
+  );
 };
 
 export default StockDetails;

@@ -25,9 +25,13 @@ const API_KEY = "d2tendpr01qr5a72a7b0d2tendpr01qr5a72a7bg";
 
 const StockChart = ({ stock }) => {
   const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!stock) return;
+
+    setLoading(true); // при смене тикера снова показываем загрузку
+    setChartData([]);
 
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
 
@@ -38,12 +42,13 @@ const StockChart = ({ stock }) => {
     socket.addEventListener("message", (e) => {
       const message = JSON.parse(e.data);
       if (message.type === "trade" && message.data?.length) {
-        const tradeData = message.data[message.data.length - 1]; // берём последнюю сделку
+        const tradeData = message.data[message.data.length - 1];
         setChartData((prevData) => {
           const newData = [
             ...prevData,
             { time: new Date().toLocaleTimeString(), price: tradeData.p },
           ];
+          if (newData.length === 1) setLoading(false); // получили первые данные
           return newData.length > 50 ? newData.slice(1) : newData;
         });
       }
@@ -56,6 +61,24 @@ const StockChart = ({ stock }) => {
       socket.close();
     };
   }, [stock]);
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "300px",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "18px",
+          color: "#666",
+        }}
+      >
+        ⏳ Загрузка графика...
+      </div>
+    );
+  }
 
   const data = {
     labels: chartData.map((item) => item.time),

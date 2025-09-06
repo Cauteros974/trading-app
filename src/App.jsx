@@ -6,7 +6,7 @@ import StockChart from './StockChart';
 import './App.css';
 
 function App() {
-  const [selectedStock, setSelectedStock,] = useState(null);
+  const [selectedStock, setSelectedStock] = useState(null);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -24,7 +24,13 @@ function App() {
       </button>
 
       <TradingTable onStockSelect={handleStockSelect} />
-      {selectedStock && <StockDetails stock={selectedStock} />}
+
+      {selectedStock && (
+        <>
+          <StockDetails stock={selectedStock} />
+          <StockChart stock={selectedStock} />
+        </>
+      )}
     </div>
   );
 }

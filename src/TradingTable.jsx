@@ -12,7 +12,6 @@ const Header = () => (
     style={{
       display: "grid",
       gridTemplateColumns: "1.2fr 0.8fr 0.8fr",
-      gap: 0,
       padding: "12px 15px",
       background: "#007bff",
       color: "#fff",
@@ -21,9 +20,9 @@ const Header = () => (
       borderTopRightRadius: 8,
     }}
   >
-    <div>Тикер</div>
-    <div>Цена</div>
-    <div>Изменение</div>
+    <div>Ticker</div>
+    <div>Price</div>
+    <div>Change</div>
   </div>
 );
 
@@ -41,12 +40,9 @@ const Row = memo(({ index, style, data }) => {
         gridTemplateColumns: "1.2fr 0.8fr 0.8fr",
         alignItems: "center",
         padding: "0 15px",
-        height: "40px",
         borderBottom: "1px solid #eee",
         cursor: "pointer",
-        userSelect: "none",
       }}
-      role="row"
     >
       <div>{stock.ticker}</div>
       <div>{stock.price.toFixed(2)}</div>
@@ -75,64 +71,54 @@ const TradingTable = ({ onStockSelect }) => {
 
     socket.addEventListener("open", subscribe);
 
-    socket.addEventListener("message", (event) => {
-      const message = JSON.parse(event.data);
-      if (message.type === "ping") return;
-      if (message.type !== "trade" || !Array.isArray(message.data)) return;
-   
-      setStocks((prev) => {
-        const map = Object.create(null);
-        for (const s of prev) map[s.ticker] = s;
+    socket.addEventListener("message", (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type !== "trade" || !Array.isArray(msg.data)) return;
 
-        for (const t of message.data) {
+      setStocks((prev) => {
+        const map = Object.fromEntries(prev.map((s) => [s.ticker, s]));
+
+        for (const t of msg.data) {
           const symbol = t.s;
           const price = t.p;
           const prevItem = map[symbol];
 
-          if (prevItem) {
-            const change = price - prevItem.price;
-            map[symbol] = {
-              ...prevItem,
-              price: round2(price),
-              change: round2(change),
-            };
-          } else {
-            map[symbol] = {
-              ticker: symbol,
-              price: round2(price),
-              change: 0,
-            };
-          }
+          map[symbol] = prevItem
+            ? {
+                ...prevItem,
+                price: round2(price),
+                change: round2(price - prevItem.price),
+              }
+            : {
+                ticker: symbol,
+                price: round2(price),
+                change: 0,
+              };
         }
 
-        const next = Object.values(map).sort((a, b) =>
+        return Object.values(map).sort((a, b) =>
           a.ticker.localeCompare(b.ticker)
         );
-        return next;
       });
     });
 
-    socket.addEventListener("error", (e) => {
-      console.error("WS error:", e);
-    });
-
-    socket.addEventListener("close", (e) => {
-      console.warn("WS closed:", e.code, e.reason);
-    });
-
-    return () => socket.close();
+    return () => {
+      tickers.forEach((t) =>
+        socket.send(JSON.stringify({ type: "unsubscribe", symbol: t }))
+      );
+      socket.close();
+    };
   }, []);
 
   return (
     <div style={{ padding: 20 }}>
-      <h2 style={{ marginBottom: 6 }}>Биржевой стакан</h2>
+      <h2>Exchange glass</h2>
       <p style={{ marginTop: 0, color: "#555" }}>
-        Обновляется в реальном времени (Finnhub)
+        Updated in real time (Finnhub)
       </p>
 
       <div
         style={{
-          width: "100%",
           maxWidth: 820,
           background: "#fff",
           borderRadius: 8,
@@ -141,14 +127,13 @@ const TradingTable = ({ onStockSelect }) => {
         }}
       >
         <Header />
-
         <FixedSizeList
           height={600}
           itemCount={stocks.length}
           itemSize={40}
           itemData={{ list: stocks, onStockSelect }}
-          width={"100%"}
-          itemKey={(index, data) => data.list[index].ticker}
+          width="100%"
+          itemKey={(index, data) => data.list[index]?.ticker ?? index}
         >
           {Row}
         </FixedSizeList>

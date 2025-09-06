@@ -23,44 +23,69 @@ ChartJS.register(
 
 const API_KEY = "d2tendpr01qr5a72a7b0d2tendpr01qr5a72a7bg";
 
-const StockChart = ({ stock }) => {
-  const [chartData, setChartData] = useState([]);
+const StockChart = ({ stocks }) => {
+  const [chartData, setChartData] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!stock) return;
+    if (!stocks?.length) return;
 
     setLoading(true);
-    setChartData([]);
+    setChartData({});
 
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
 
-    socket.addEventListener("open", () => {
-      socket.send(JSON.stringify({ type: "subscribe", symbol: stock.ticker }));
-    });
+    const subscribe = () => {
+      stocks.forEach((stock) => {
+        socket.send(JSON.stringify({ type: "subscribe", symbol: stock.ticker }));
+      });
+    };
+
+    const unsubscribe = () => {
+      if (socket.readyState === WebSocket.OPEN) {
+        stocks.forEach((stock) => {
+          socket.send(
+            JSON.stringify({ type: "unsubscribe", symbol: stock.ticker })
+          );
+        });
+      }
+    };
+
+    socket.addEventListener("open", subscribe);
 
     socket.addEventListener("message", (e) => {
       const message = JSON.parse(e.data);
       if (message.type === "trade" && message.data?.length) {
-        const tradeData = message.data[message.data.length - 1];
-        setChartData((prevData) => {
-          const newData = [
-            ...prevData,
-            { time: new Date().toLocaleTimeString(), price: tradeData.p },
-          ];
-          if (newData.length === 1) setLoading(false);
-          return newData.length > 50 ? newData.slice(1) : newData;
+        const trade = message.data[message.data.length - 1];
+        const time = new Date().toLocaleTimeString("en-GB", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
         });
+
+        setChartData((prev) => {
+          const prevStockData = prev[trade.s] || [];
+          const newStockData = [
+            ...prevStockData,
+            { time, price: trade.p },
+          ].slice(-50);
+
+          return {
+            ...prev,
+            [trade.s]: newStockData,
+          };
+        });
+
+        setLoading(false);
       }
     });
 
     return () => {
-      socket.send(
-        JSON.stringify({ type: "unsubscribe", symbol: stock.ticker })
-      );
+      unsubscribe();
       socket.close();
     };
-  }, [stock]);
+  }, [stocks]);
 
   if (loading) {
     return (
@@ -75,32 +100,33 @@ const StockChart = ({ stock }) => {
           color: "#666",
         }}
       >
-        ⏳ Загрузка графика...
+        ⏳ Loading chart...
       </div>
     );
   }
+  
+  const labels =
+    Object.values(chartData)[0]?.map((item) => item.time) || [];
 
-  const data = {
-    labels: chartData.map((item) => item.time),
-    datasets: [
-      {
-        label: "Price",
-        data: chartData.map((item) => item.price),
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-        pointRadius: 0,
-      },
-    ],
-  };
+  const datasets = stocks.map((stock, idx) => ({
+    label: stock.ticker,
+    data: chartData[stock.ticker]?.map((item) => item.price) || [],
+    borderColor: `hsl(${(idx * 60) % 360}, 70%, 50%)`,
+    tension: 0.2,
+    pointRadius: 0,
+  }));
+
+  const data = { labels, datasets };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     animation: false,
     plugins: {
-      legend: { display: false },
+      legend: { display: true, position: "top" },
       tooltip: {
         callbacks: {
-          label: (context) => `Price: ${context.raw}`,
+          label: (context) => `${context.dataset.label}: ${context.raw}`,
         },
       },
     },

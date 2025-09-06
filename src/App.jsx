@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import TradingTable from './TradingTable';
 import StockDetails from './StockDetails';
 import { useTheme } from './ThemeContext';
@@ -12,15 +12,16 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  const handleStockSelect = (stock) => {
+  const handleStockSelect = useCallback((stock) => {
     setSelectedStock(stock);
-  };
+  }, []);
 
   return (
     <div className="App">
-      <button onClick={toggleTheme} style={{ position: 'fixed', top: '20px', right: '20px', padding: '10px 15px', cursor: 'pointer', zIndex: 100 }}>
-      Switch topic ({theme === 'light' ? 'Light' : 'Dark'})
+      <button onClick={toggleTheme} className="theme-switcher">
+        Switch theme ({theme === 'light' ? 'Light' : 'Dark'})
       </button>
+
       <TradingTable onStockSelect={handleStockSelect} />
       {selectedStock && <StockDetails stock={selectedStock} />}
     </div>

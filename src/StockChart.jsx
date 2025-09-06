@@ -30,7 +30,7 @@ const StockChart = ({ stock }) => {
   useEffect(() => {
     if (!stock) return;
 
-    setLoading(true); // при смене тикера снова показываем загрузку
+    setLoading(true);
     setChartData([]);
 
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
@@ -48,7 +48,7 @@ const StockChart = ({ stock }) => {
             ...prevData,
             { time: new Date().toLocaleTimeString(), price: tradeData.p },
           ];
-          if (newData.length === 1) setLoading(false); // получили первые данные
+          if (newData.length === 1) setLoading(false);
           return newData.length > 50 ? newData.slice(1) : newData;
         });
       }

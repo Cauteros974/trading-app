@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import TradingTable from './TradingTable';
 import StockDetails from './StockDetails';
 import { useTheme } from './ThemeContext';
+import StockChart from './StockChart';
 import './App.css';
 
 function App() {
-  const [selectedStock, setSelectedStock] = useState(null);
+  const [selectedStock, setSelectedStock,] = useState(null);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {

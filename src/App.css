@@ -35,3 +35,23 @@ th{
 tr:nth-child(even){
   background-color: #f2f2f2;
 }
+
+.stock-details-card {
+  margin-left: 40px;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  text-align: center;
+  background: var(--bg-color);
+  color: var(--text-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stock-details-card h2 {
+  margin-bottom: 10px;
+}
+
+.stock-price {
+  font-size: 24px;
+  font-weight: bold;
+}

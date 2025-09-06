@@ -36,7 +36,7 @@ const Row = memo(({ index, style, data }) => {
     <div
       onClick={() => onStockSelect?.(stock)}
       style={{
-        ...style, // важно: react-window передает позиционирование сюда
+        ...style,
         display: "grid",
         gridTemplateColumns: "1.2fr 0.8fr 0.8fr",
         alignItems: "center",
@@ -79,8 +79,7 @@ const TradingTable = ({ onStockSelect }) => {
       const message = JSON.parse(event.data);
       if (message.type === "ping") return;
       if (message.type !== "trade" || !Array.isArray(message.data)) return;
-
-      // Обрабатываем все трейды одним батчем
+   
       setStocks((prev) => {
         const map = Object.create(null);
         for (const s of prev) map[s.ticker] = s;

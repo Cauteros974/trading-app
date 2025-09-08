@@ -1,7 +1,7 @@
 import React, { useEffect, useState, memo, useRef } from "react";
 import { FixedSizeList } from "react-window";
 
-const API_KEY = "d2u1bg9r01qr5a74d4n0d2u1bg9r01qr5a74d4ng";
+const API_KEY = "d2vhaq1r01qm5lo8aq10d2vhaq1r01qm5lo8aq1g";
 
 const round2 = (n) => Math.round(n * 100) / 100;
 const fmtChange = (c) => (c === null || c === undefined ? "—" : c.toFixed(2));
@@ -12,7 +12,7 @@ const Header = () => (
     style={{
       display: "grid",
       gridTemplateColumns: "1.2fr 0.8fr 0.8fr",
-      padding: "12px 15px",
+      padding: "20px 300px",
       background: "#007bff",
       color: "#fff",
       fontWeight: 600,

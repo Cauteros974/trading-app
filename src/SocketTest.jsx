@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const API_KEY = "d2u1bg9r01qr5a74d4n0d2u1bg9r01qr5a74d4ng";
+const API_KEY = "d2vhq11r01qm5lo8cotgd2vhq11r01qm5lo8cou0";
 
 export default function SocketTest() {
     useEffect(() => {

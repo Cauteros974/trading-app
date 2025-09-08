@@ -62,7 +62,10 @@ const TradingTable = ({ onStockSelect }) => {
       "NVDA", "META", "BABA", "NFLX", "SBUX",
       "UBER", "DIS", "INTC", "CSCO", "PEP"
     ];
-  })
+
+    const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
+    socketRef.current = socket;
+  });
 };
 
 

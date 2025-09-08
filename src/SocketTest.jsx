@@ -26,6 +26,4 @@ export default function SocketTest() {
 
         return () => addEventListener;
     }, []);
-
-    return <h2>Check Your Console(F12 → Console</h2>;
 }

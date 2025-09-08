@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <button onClick={toggleTheme} className="theme-switcher">
-      <svg class="bn-svg theme-icon hover-color" viewBox="0 0 24 24"></svg>
+      <img src='/src/assets/moon-svgrepo-com.svg'></img>
       </button>
 
       <TradingTable onStockSelect={handleStockSelect} />

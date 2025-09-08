@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useRef } from "react";
 import { FixedSizeList } from "react-window";
 
 const API_KEY = "d2u1bg9r01qr5a74d4n0d2u1bg9r01qr5a74d4ng";
@@ -50,6 +50,20 @@ const Row = memo(({ index, style, data }) => {
     </div>
   );
 });
+
+const TradingTable = ({ onStockSelect }) => {
+  const [stocs, setStocks] = useState([]);
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    const tickers = [
+      "AAPL", "GOOGL", "MSFT", "AMZN", "TSLA",
+      "BINANCE:BTCUSDT", "BINANCE:ETHUSDT",
+      "NVDA", "META", "BABA", "NFLX", "SBUX",
+      "UBER", "DIS", "INTC", "CSCO", "PEP"
+    ];
+  })
+};
 
 
 export default TradingTable;

@@ -52,7 +52,7 @@ const Row = memo(({ index, style, data }) => {
 });
 
 const TradingTable = ({ onStockSelect }) => {
-  const [stocs, setStocks] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const socketRef = useRef(null);
 
   useEffect(() => {
@@ -62,11 +62,94 @@ const TradingTable = ({ onStockSelect }) => {
       "NVDA", "META", "BABA", "NFLX", "SBUX",
       "UBER", "DIS", "INTC", "CSCO", "PEP"
     ];
-
+   
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
     socketRef.current = socket;
-  });
-};
+    
+    const subscribe = () => {
+      
+      if (socket.readyState === WebSocket.OPEN) {
+        tickers.forEach((t) =>
+          socket.send(JSON.stringify({ type: "subscribe", symbol: t }))
+        );
+      }
+    };
+    
+    socket.addEventListener("open", subscribe);
+    
+    socket.addEventListener("message", (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type !== "trade" || !Array.isArray(msg.data)) return;
 
+      setStocks((prev) => {
+        const prevMap = new Map(prev.map(s => [s.ticker, s]));
+        let hasNewData = false;
+        
+        for (const t of msg.data) {
+          const symbol = t.s;
+          const price = round2(t.p);
+          const prevItem = prevMap.get(symbol);
+          
+          const change = prevItem ? round2(price - prevItem.price) : 0;
+          
+          if (prevItem?.price !== price) {
+            hasNewData = true;
+            prevMap.set(symbol, {
+                ticker: symbol,
+                price: price,
+                change: change,
+            });
+          }
+        }
+        
+        if (!hasNewData) return prev;
+
+        return Array.from(prevMap.values()).sort((a, b) =>
+          a.ticker.localeCompare(b.ticker)
+        );
+      });
+    });
+  
+    return () => {
+      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+        tickers.forEach((t) =>
+          socketRef.current.send(JSON.stringify({ type: "unsubscribe", symbol: t }))
+        );
+        socketRef.current.close();
+      }
+    };
+  }, []);
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>Exchange glass</h2>
+      <p style={{ marginTop: 0, color: "#555" }}>
+        Updated in real time (Finnhub)
+      </p>
+
+      <div
+        style={{
+          maxWidth: 820,
+          background: "#fff",
+          borderRadius: 8,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+          overflow: "hidden",
+        }}
+      >
+        <Header />
+        <FixedSizeList
+          height={600}
+          itemCount={stocks.length}
+          itemSize={40}
+          itemData={{ list: stocks, onStockSelect }}
+          width="100%"
+          itemKey={(index, data) => data.list[index]?.ticker ?? index}
+        >
+          {Row}
+        </FixedSizeList>
+      </div>
+    </div>
+  );
+};
 
 export default TradingTable;

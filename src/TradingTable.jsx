@@ -29,7 +29,7 @@ const Header = () => (
 const Row = memo(({ index, style, data }) => {
   const { list, onStockSelect } = data;
   const stock = list[index];
-  if(!stock) return null;
+  if (!stock) return null;
 
   return (
     <div

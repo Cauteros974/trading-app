@@ -7,7 +7,7 @@ const round2 = (n) => Math.round(n * 100) / 100;
 const fmtChange = (c) => (c === null || c === undefined ? "—" : c.toFixed(2));
 const changeColor = (c) => (c > 0 ? "green" : c < 0 ? "red" : "inherit");
 
-const Header () => (
+const Header = () => (
   <div
     style={{
       display: "grid",
@@ -49,4 +49,7 @@ const Row = memo(({ index, style, data }) => {
       <div style={{ color: changeColor(stock.change) }}>{fmtChange(stock.change)}</div>
     </div>
   );
-})
+});
+
+
+export default TradingTable;

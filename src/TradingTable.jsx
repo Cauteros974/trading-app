@@ -25,3 +25,28 @@ const Header () => (
     <div>Change</div>
   </div>
 );
+
+const Row = memo(({ index, style, data }) => {
+  const { list, onStockSelect } = data;
+  const stock = list[index];
+  if(!stock) return null;
+
+  return (
+    <div
+      onClick={() => onStockSelect?.(stock)}
+      style={{
+        ...style,
+        display: "grid",
+        gridTemplateColumns: "1.2fr 0.8fr 0.8fr",
+        alignItems: "center",
+        padding: "0 15px",
+        borderBottom: "1px solid #eee",
+        cursor: "pointer",
+      }}
+    >
+      <div>{stock.ticker}</div>
+      <div>{stock.price.toFixed(2)}</div>
+      <div style={{ color: changeColor(stock.change) }}>{fmtChange(stock.change)}</div>
+    </div>
+  );
+})

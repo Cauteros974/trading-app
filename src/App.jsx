@@ -3,6 +3,7 @@ import TradingTable from './TradingTable';
 import StockDetails from './StockDetails';
 import { useTheme } from './ThemeContext';
 import StockChart from './StockChart';
+import SocketTest from './SocketTest';
 import './App.css';
 
 function App() {
@@ -31,7 +32,11 @@ function App() {
           <StockChart stock={selectedStock} />
         </>
       )}
+
+      <SocketTest />
     </div>
+
+    
   );
 }
 

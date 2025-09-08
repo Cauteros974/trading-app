@@ -19,5 +19,13 @@ export default function SocketTest() {
         socket.addEventListener("error", (err) => {
             console.error("❌ WS error:", err);
         });
-    });
+
+        socket.addEventListener("close", () =>{
+            console.warn("⚠️ WS closed");
+        });
+
+        return () => addEventListener;
+    }, []);
+
+    return <h2>Check Your Console(F12 → Console</h2>;
 }

@@ -9,6 +9,13 @@ const TickerDropdown = ({ stocks, selectedStocks, onStockSelect}) => {
           stock.ticker.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [stocks, searchTerm]);
+
+    const handleSelect = (stock) => {
+        onStockSelect(stock);
+        setSearchTerm(stock.ticker);
+        setIsOpen(false);
+    };
+    
 };
 
 export default TickerDropdown;

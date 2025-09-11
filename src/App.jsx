@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import TradingTable from './TradingTable';
-import StockDetails from './StockDetails';
-import { useTheme } from './ThemeContext';
-import StockChart from './StockChart';
-import SocketTest from './SocketTest';
+import TradingTable from './components/TradingTable';
+import StockDetails from './components/StockDetails';
+import { useTheme } from './components/ThemeContext';
+import StockChart from './components/StockChart';
+import SocketTest from './components/SocketTest';
 import './App.css';
 
 function App() {

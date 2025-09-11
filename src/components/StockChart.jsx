@@ -29,6 +29,10 @@ const StockChart = memo(({ stock }) => {
         secondsVisible: false,
       },
   });
+
+  fetchHistoricalData(stock.ticker).then(data => {
+    candlestickSeries.setData(data);
+  });
 });
 
 export default StockChart;

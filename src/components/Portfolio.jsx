@@ -11,7 +11,7 @@ const Portfolio = ({ portfolio }) => {
         >
             <h2>Virtual portfolio</h2>
             {portfolio.length === 0 ? (
-        <p>Ваш портфель пуст.</p>
+        <p>Your briefcase is empty.</p>
       ) : (
         <table>
           <thead>

@@ -37,7 +37,7 @@ const TradingTable = ({ onStockSelect}) => {
     <div className="trading-table-container">
       <input
         type="text"
-        placeholder="Поиск по тикеру..."
+        placeholder="Search by ticker..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="search-input"

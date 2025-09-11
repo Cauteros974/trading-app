@@ -9,7 +9,7 @@ import { useStore } from './store';
 import './App.css';
 
 function App() {
-  const { stocks, setStocks, portfolio, buyStock, sellStock } = useStore();
+  const { stocks, portfolio, buyStock, sellStock } = useStore();
   const [selectedStock, setSelectedStock] = useState(null);
 
   useEffect(() => {

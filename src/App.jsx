@@ -12,7 +12,6 @@ function App() {
   const { stocks, setStocks, portfolio, buyStock, sellStock } = useStore();
   const [selectedStock, setSelectedStock] = useState(null);
 
-  // Логика WebSocket остается в App.jsx и обновляет состояние через Zustand
   useEffect(() => {
     const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY; 
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
@@ -76,7 +75,7 @@ function App() {
     <ThemeProvider>
       <div className="App">
         <div className="main-content">
-          <h2>Биржевой стакан</h2>
+          <h2>Exchange glass</h2>
           <TickerDropdown
             stocks={stocks}
             selectedStock={selectedStock}

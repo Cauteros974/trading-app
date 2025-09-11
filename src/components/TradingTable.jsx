@@ -2,11 +2,11 @@ import React, { useState, useMemo } from 'react';
 import { FixedSizeList } from 'react-window';
 import { useStore } from '../store';
 
-const Row = ({ index, style, data}) => {
-  const { filteredStocks, onStockSelect} = data;
+const Row = ({ index, style, data }) => {
+  const { filteredStocks, onStockSelect } = data;
   const stock = filteredStocks[index];
 
-  if(!stock){
+  if (!stock) {
     return null;
   }
 
@@ -23,7 +23,7 @@ const Row = ({ index, style, data}) => {
   );
 };
 
-const TradingTable = ({ onStockSelect}) => {
+const TradingTable = ({ onStockSelect }) => {
   const stocks = useStore(state => state.stocks);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -37,7 +37,7 @@ const TradingTable = ({ onStockSelect}) => {
     <div className="trading-table-container">
       <input
         type="text"
-        placeholder="Search by ticker..."
+        placeholder="Поиск по тикеру..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="search-input"

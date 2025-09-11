@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { r as million } from 'million/react';
+import { wrap } from 'framer-motion';
 import App from './App';
 
-million.wrap();
+wrap();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

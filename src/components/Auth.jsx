@@ -31,8 +31,34 @@ const Auth = () => {
         initial= {{ opacity: 0, scale: 0.9}}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        />
-    )
+        >
+            <h2>{isSignin ? 'SignIn' : 'SingUp'}</h2>
+            <form onSubmit={handleAuth} className="auth-free">
+                <input 
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    required
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input 
+                    type="password"
+                    placeholder="Your password"
+                    value={password}
+                    required
+                    onChange={(e) => serPassword(e.target.value)}
+                />
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Loading...' : isSignin ? 'SignIn' : 'SignUp'}
+                </button>
+            </form>
+
+            <button onClick={() => setIsSignIn(!isSignIn)} className="toggle-auth"> 
+                {isSignIn ? 'Need an account? Register' : 'Already have an account? Login'}
+            </button>
+
+        </motion.div>
+    );
 };
 
 export default Auth;

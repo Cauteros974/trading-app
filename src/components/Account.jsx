@@ -23,7 +23,7 @@ const Account = ({ session }) => {
                 Exit
             </button>
         </motion.div>
-    )
+    );
 };
 
 export default Account;

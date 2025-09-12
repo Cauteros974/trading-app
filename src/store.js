@@ -29,7 +29,7 @@ export const useStore = create((set, get) => ({
       set({ portfolio: [...portfolio, newItem] });
     }
   },
-  
+
   sellStock: (stock, quantity) => {
     const { portfolio } = get();
     const existingItem = portfolio.find(item => item.ticker === stock.ticker);
@@ -49,7 +49,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-    fetchHistoricalData: async (ticker) => {
+  fetchHistoricalData: async (ticker) => {
     const now = Math.floor(Date.now() / 1000);
     const oneMonthAgo = now - 30 * 24 * 60 * 60;
 

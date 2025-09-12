@@ -13,9 +13,20 @@ import './App.css';
 
 function App() {
   const { stocks, portfolio, buyStock, sellStock } = useStore();
+  const [session, setSession] = useState(null);
   const [selectedStock, setSelectedStock] = useState(null);
 
   useEffect(() => {
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+
     const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY; 
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
     const tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BINANCE:BTCUSDT", "BINANCE:ETHUSDT", "NVDA", "META", "BABA", "NFLX", "SBUX", "UBER", "DIS", "INTC", "CSCO", "PEP"];

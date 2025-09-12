@@ -3,7 +3,7 @@ import { create } from 'zustand';
 const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY;
 
 export const useStore = create((set, get) => ({
-  stocks: [],
+    stocks: [],
   portfolio: [],
 
   setStocks: (newStocks) => set({ stocks: newStocks }),

@@ -110,7 +110,7 @@ h1, h2, h3 {
 /* --- Inputs --- */
 .search-input,
 .quantity-input {
-  width: 100%;
+  width: 97%;
   padding: 0.8rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;

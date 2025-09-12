@@ -253,7 +253,7 @@ tr:last-child td {
 
 .auth-form input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px 0px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
@@ -266,6 +266,10 @@ tr:last-child td {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px var(--primary-color-faded);
+}
+
+.auth-form input::placeholder{
+  padding-left: 8px;
 }
 
 /* --- Стили для кнопок входа/выхода --- */
@@ -292,4 +296,5 @@ tr:last-child td {
 .toggle-auth:hover,
 .logout-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0,
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}

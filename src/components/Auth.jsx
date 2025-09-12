@@ -31,7 +31,7 @@ const Auth = () => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <h2>{isSignIn ? 'SignIn' : 'SignUp'}</h2>
+      <h2>{isSignIn ? 'Sign In' : 'Sign Up'}</h2>
       <form onSubmit={handleAuth} className="auth-form">
         <input
           type="email"
@@ -48,11 +48,11 @@ const Auth = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit" disabled={loading}>
-          {loading ? 'Loading...' : isSignIn ? 'SignIn' : 'SignUp'}
+          {loading ? 'Loading...' : isSignIn ? 'Sign In' : 'Sign Up'}
         </button>
       </form>
       <button onClick={() => setIsSignIn(!isSignIn)} className="toggle-auth">
-        {isSignIn ? 'Need an account? SignUp' : 'Already have an account? SignIn'}
+        {isSignIn ? 'Need an account? Sign Up' : 'Already have an account? Sign In'}
       </button>
     </motion.div>
   );

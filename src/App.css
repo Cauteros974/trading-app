@@ -217,3 +217,79 @@ tr:last-child td {
     align-items: flex-start;
   }
 }
+
+/* --- Styles for login/registration forms and personal account --- */
+.auth-container,
+.account-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 400px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.auth-container h2,
+.account-container h2 {
+  margin-top: 0;
+  color: var(--header-color);
+}
+
+/* --- Form styles --- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-faded);
+}
+
+/* --- Стили для кнопок входа/выхода --- */
+.auth-form button,
+.toggle-auth,
+.logout-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.auth-form button:hover,
+.toggle-auth:hover,
+.logout-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0,

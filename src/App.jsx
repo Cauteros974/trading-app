@@ -17,7 +17,6 @@ function App() {
   const [selectedStock, setSelectedStock] = useState(null);
 
   useEffect(() => {
-
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -25,7 +24,6 @@ function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-
 
     const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY; 
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
@@ -82,12 +80,16 @@ function App() {
 
     return () => {
       socket.close();
+      subscription.unsubscribe();
     };
   }, []);
 
   return (
     <ThemeProvider>
       <div className="App">
+        <div className="auth-section">
+          {!session ? <Auth /> : <Account session={session} />}
+        </div>
         <div className="main-content">
           <h2>Exchange glass</h2>
           <TickerDropdown

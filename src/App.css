@@ -299,14 +299,14 @@ tr:last-child td {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Стили для модального окна --- */
+/* --- Styles for modal window --- */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный чёрный фон */
+  background-color: rgba(0, 0, 0, 0.5); /* Translucent black background */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -324,7 +324,7 @@ tr:last-child td {
   position: relative;
 }
 
-/* --- Стили для кнопок в шапке --- */
+/* --- Styles for buttons in the header --- */
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -355,4 +355,39 @@ tr:last-child td {
 .header-button:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Authentication Form and Modal --- */
+
+.modal-content .auth-container {
+  width: 100%; /* Ensure the auth container takes full width of the modal content */
+  max-width: none; /* Override the default max-width for better control */
+  margin: 0; /* Reset margin */
+  padding: 0; /* Reset padding */
+  border: none; /* Remove border if inherited */
+  box-shadow: none; /* Remove shadow if inherited */
+  background-color: transparent; /* Make background transparent to use modal-content background */
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Consistent spacing between form elements */
+  width: 100%;
+}
+
+.auth-form input,
+.auth-form button {
+  width: 100%;
+}
+
+.toggle-auth {
+  margin-top: 10px; /* Add some space between the buttons */
+  width: 100%;
+}
+
+/* Ensure consistent button height */
+.auth-form button,
+.toggle-auth {
+  padding: 12px;
 }

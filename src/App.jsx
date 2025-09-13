@@ -16,7 +16,7 @@ function App() {
   const [session, setSession] = useState(null);
   const [selectedStock, setSelectedStock] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showAccountModal, setShowAccountModal] = 
+  const [showAccountModal, setShowAccountModal] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

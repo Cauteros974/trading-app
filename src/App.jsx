@@ -15,6 +15,8 @@ function App() {
   const { stocks, portfolio, buyStock, sellStock } = useStore();
   const [session, setSession] = useState(null);
   const [selectedStock, setSelectedStock] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showAccountModal, setShowAccountModal] = 
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -23,6 +25,8 @@ function App() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setShowAuthModal(false);
+      setShowAccountModal(false);
     });
 
     const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY; 

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { createChart, LineSeries } from 'lightweight-charts';
 
 const StockDetails = ({ stock }) => {
   if (!stock) {

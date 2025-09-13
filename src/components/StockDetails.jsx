@@ -1,7 +1,14 @@
-import React from 'react';
-import { createChart, LineSeries } from 'lightweight-charts';
+import React, { useState } from 'react';
+import { createChart } from 'lightweight-charts';
+import { motion } from 'framer-motion';
+import { useStore } from '../store';
 
-const StockDetails = ({ stock }) => {
+const StockDetails = ({ stock, buyStock, sellStock }) => {
+
+  const[ quantity, setQuantite ] = useState(1);
+  const chartContainerRef = useRef();
+  const { fetchHistoricalData } = useStore();
+
   if (!stock) {
     return null;
   }

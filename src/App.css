@@ -272,7 +272,7 @@ tr:last-child td {
   padding-left: 8px;
 }
 
-/* --- Стили для кнопок входа/выхода --- */
+/* --- Styles for login/logout buttons --- */
 .auth-form button,
 .toggle-auth,
 .logout-button {

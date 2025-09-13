@@ -84,18 +84,36 @@ function App() {
 
     return () => {
       socket.close();
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 
   return (
     <ThemeProvider>
       <div className="App">
-        <div className="auth-section">
-          {!session ? <Auth /> : <Account session={session} />}
-        </div>
+        <header className="app-header">
+          <h1>Exchange Glass</h1>
+          <div className="auth-buttons">
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="header-button"
+            >
+              SignIn / SignUp
+            </button>
+            {session && (
+              <button
+                onClick={() => setShowAccountModal(true)}
+                className="header-button"
+              >
+                Personal account
+              </button>
+            )}
+          </div>
+        </header>
+
         <div className="main-content">
-          <h2>Exchange glass</h2>
           <TickerDropdown
             stocks={stocks}
             selectedStock={selectedStock}
@@ -115,7 +133,7 @@ function App() {
           </div>
           <Portfolio portfolio={portfolio} />
         </div>
-
+       
         <AnimatePresence>
           {showAuthModal && (
             <div className="modal-overlay" onClick={() => setShowAuthModal(false)}>
@@ -125,12 +143,12 @@ function App() {
             </div>
           )}
         </AnimatePresence>
-
+        
         <AnimatePresence>
           {showAccountModal && session && (
             <div className="modal-overlay" onClick={() => setShowAccountModal(false)}>
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <Account session={false} />
+                <Account session={session} />
               </div>
             </div>
           )}

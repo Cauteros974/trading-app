@@ -125,6 +125,16 @@ function App() {
             </div>
           )}
         </AnimatePresence>
+
+        <AnimatePresence>
+          {showAccountModal && session && (
+            <div className="modal-overlay" onClick={() => setShowAccountModal(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <Account session={false} />
+              </div>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </ThemeProvider>
   );

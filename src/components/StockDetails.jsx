@@ -1,13 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createChart } from 'lightweight-charts';
 import { motion } from 'framer-motion';
 import { useStore } from '../store';
+import { create } from 'zustand';
 
 const StockDetails = ({ stock, buyStock, sellStock }) => {
 
   const[ quantity, setQuantite ] = useState(1);
   const chartContainerRef = useRef();
   const { fetchHistoricalData } = useStore();
+
+  useEffect(() =>{
+    let Chart = null;
+    let candleSeries = null;
+    let dataLoaded = false;
+
+    const fetchAndRenderChart = async () => {
+      const historicalData = await fetchHistoricalData(stock.ticker);
+      if (historicalData.length > 0) {
+        candleSeries.setData(historicalData);
+        dataLoaded = true;
+      }
+    };
+
+    if (chartContainerRef.current) {
+      chart = createChart(chartContainerRef.current, {
+        width: chartContainerRef.current.clientWidth,
+        height: 300,
+        layout: {
+          backgroundColor: '#000000',
+          textColor: '#d1d4dc',
+        },
+        grid: {
+          vertLines: { color: '#334158' },
+          horzLines: { color: '#334158' },
+        },
+        rightPriceScale: {
+          borderColor: '#48587b',
+        },
+        timeScale: {
+          borderColor: '#48587b',
+        },
+      });
+
+      
+    }
+  })
 
   if (!stock) {
     return null;

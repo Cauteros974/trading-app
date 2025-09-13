@@ -115,6 +115,16 @@ function App() {
           </div>
           <Portfolio portfolio={portfolio} />
         </div>
+
+        <AnimatePresence>
+          {showAuthModal && (
+            <div className="modal-overlay" onClick={() => setShowAuthModal(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <Auth />
+              </div>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </ThemeProvider>
   );

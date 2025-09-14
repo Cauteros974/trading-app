@@ -15,6 +15,6 @@ If you are developing a production application, we recommend using TypeScript wi
 ![alt text](https://github.com/Cauteros974/trading-app/blob/main/src/assets/photo1.png)
 ![alt text](https://github.com/Cauteros974/trading-app/blob/main/src/assets/photo2.png)
 ![alt text](https://github.com/Cauteros974/trading-app/blob/main/src/assets/photo3.png)
-![alt text](https://github.com/Cauteros974/trading-app/blob/main/src/assets/photo4.png)
 ![alt text](https://github.com/Cauteros974/trading-app/blob/main/src/assets/photo5.png)
 ![alt text](https://github.com/Cauteros974/trading-app/blob/main/src/assets/photo6.png)
+![alt text](https://github.com/Cauteros974/trading-app/blob/main/src/assets/photo7.png)

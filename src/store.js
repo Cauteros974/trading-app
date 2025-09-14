@@ -48,4 +48,23 @@ export const usestore = create((get, set)=> ({
       set({ portfolio: updatedPortfolio });
     }
   },
+
+  fetchHistoricalData: async (ticker) => {
+    try{
+      if (!ticker || !API_KEY){
+        return[];
+      }
+
+      const now = Math.floor(Date.now() / 1000);
+      const oneMonthAgo = now - 30 * 24 * 60 * 60;
+
+      const response = await fetch(
+        `https://finnhub.io/api/v1/stock/candle?symbol=${ticker}&resolution=D&from=${oneMonthAgo}&to=${now}&token=${API_KEY}`
+      );
+
+      if (!response.ok) {
+        
+      }
+    }
+  }
 }));

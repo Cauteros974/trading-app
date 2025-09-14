@@ -20,6 +20,7 @@
     "react-dom": "^19.1.1",
     "react-virtualized": "^9.22.6",
     "react-window": "^1.8.11",
+    "supabase": "^2.40.7",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

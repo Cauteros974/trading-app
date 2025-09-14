@@ -222,10 +222,10 @@ tr:last-child td {
 .auth-container,
 .account-container {
   display: flex;
-  flex-direction: column;
+  flex-direction:column;
   align-items: center;
   gap: 20px;
-  max-width: 400px;
+  max-width: 900px;
   width: 100%;
   margin: 40px auto;
   padding: 30px;

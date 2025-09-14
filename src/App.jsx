@@ -29,7 +29,7 @@ function App() {
       setShowAccountModal(false);
     });
 
-    const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY; 
+    const API_KEY = import.meta.env.VITE_FINNHUB_API_KEY;
     const socket = new WebSocket(`wss://ws.finnhub.io?token=${API_KEY}`);
     const tickers = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BINANCE:BTCUSDT", "BINANCE:ETHUSDT", "NVDA", "META", "BABA", "NFLX", "SBUX", "UBER", "DIS", "INTC", "CSCO", "PEP"];
     
